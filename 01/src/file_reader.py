@@ -1,15 +1,19 @@
 from typing import Union, TextIO, List
 
+
 def _make_set(lst: List[str]):
     if len(lst) == 1:
         return set([lst[0]])
-    else:
-        return set(lst)
+
+    return set(lst)
+
 
 def file_reader(file: Union[str, TextIO], words: List[str]) -> List[str]:
-    if type(file) == str:
+    """Finds strings containing at least one word from words list"""
+
+    if isinstance(file, str):
         stream = open(file, encoding='utf-8')
-    elif type(file) == TextIO:
+    elif isinstance(file, TextIO):
         stream = file
 
     for string in stream:
