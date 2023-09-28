@@ -17,9 +17,13 @@ def predict_message_mood(
                          "also bad_thresholds < good_thresholds")
 
     if type(message) != str:
-        raise ValueError("message must be str")
+        raise TypeError("message must be str")
 
     res = model.predict(message)
+
+    if type(res) != float:
+        raise TypeError("model.predict(message) must return float value in range [0, 1]")
+
     if res < bad_thresholds:
         return "неуд"
     elif bad_thresholds <= res < good_thresholds:

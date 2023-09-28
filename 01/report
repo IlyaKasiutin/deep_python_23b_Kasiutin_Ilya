@@ -1,0 +1,9 @@
+Coverage for SomeModel
+
+Name              Stmts   Miss  Cover
+-------------------------------------
+SomeModel.py         17      1    94%
+test_predict.py      67      1    99%
+-------------------------------------
+TOTAL                84      2    98%
+
