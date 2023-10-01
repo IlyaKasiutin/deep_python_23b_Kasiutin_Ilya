@@ -1,8 +1,5 @@
 import unittest
 from unittest import mock
-import sys
-
-sys.path.append("../src")
 from SomeModel import SomeModel, predict_message_mood
 
 
@@ -28,10 +25,20 @@ class TestPredict(unittest.TestCase):
             mock_model.return_value = 0.5
             msg = "Test phrase"
             self.assertEqual("неуд", predict_message_mood(msg, self.model, bad_thresholds=0.6))
-            self.assertEqual("норм", predict_message_mood(msg, self.model, bad_thresholds=0.5))
+            self.assertEqual("норм", predict_message_mood(msg, self.model, bad_thresholds=0.4))
 
-            mock_model.return_value = 0.7
-            self.assertEqual("отл", predict_message_mood(msg, self.model, good_thresholds=0.7))
+            mock_model.return_value = 0.6
+            self.assertEqual("норм", predict_message_mood(msg, self.model, good_thresholds=0.7))
+
+    def test_with_corner_values(self):
+        with mock.patch("SomeModel.SomeModel.predict") as mock_model:
+            mock_model.return_value = 0.5
+            msg = "Test phrase"
+            self.assertEqual("неуд", predict_message_mood(msg, self.model, bad_thresholds=0.51))
+            self.assertEqual("норм", predict_message_mood(msg, self.model, bad_thresholds=0.5))
+            self.assertEqual("норм", predict_message_mood(msg, self.model, good_thresholds=0.51))
+            self.assertEqual("отл", predict_message_mood(msg, self.model, good_thresholds=0.5))
+
 
     def test_with_incorrect_lower_limit(self):
         with mock.patch("SomeModel.SomeModel.predict") as mock_model:
