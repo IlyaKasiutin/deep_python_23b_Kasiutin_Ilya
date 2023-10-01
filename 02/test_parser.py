@@ -1,8 +1,6 @@
 import unittest
 from unittest import mock
 import json
-import sys
-sys.path.append('../src')
 from json_parser import parse_json
 
 
@@ -69,6 +67,7 @@ class MyTestCase(unittest.TestCase):
     def test_with_wrong_json_type(self):
         with self.assertRaises(json.decoder.JSONDecodeError) as err:
             parse_json("", ['name'], ['Марфа'], self.m)
+
 
 if __name__ == '__main__':
     unittest.main()

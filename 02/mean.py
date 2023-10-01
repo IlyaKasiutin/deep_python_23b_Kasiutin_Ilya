@@ -3,7 +3,7 @@ import time
 
 def mean(n):
     def inner_mean(func):
-        runned_times = 0
+        launches = 0
         times_list = []
 
         def inner(*args, **kwargs):
@@ -11,12 +11,12 @@ def mean(n):
             res = func(*args, **kwargs)
             end_time = time.time()
 
-            nonlocal runned_times
-            runned_times += 1
+            nonlocal launches
+            launches += 1
 
             execution_time = end_time - start_time
 
-            if runned_times > n:
+            if launches > n:
                 times_list.pop(0)
             times_list.append(execution_time)
 
