@@ -1,7 +1,8 @@
 import time
 
 
-def mean(n):
+def mean(times):
+    """Calculates mean executed time for func in latest n times"""
     def inner_mean(func):
         launches = 0
         times_list = []
@@ -16,11 +17,11 @@ def mean(n):
 
             execution_time = end_time - start_time
 
-            if launches > n:
+            if launches > times:
                 times_list.pop(0)
             times_list.append(execution_time)
 
-            print(f"Mean execution time= %.3f" % (sum(times_list) / len(times_list)))
+            print("Mean execution time= %.3f" % (sum(times_list) / len(times_list)))
             return res
 
         return inner
