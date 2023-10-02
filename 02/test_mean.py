@@ -2,6 +2,7 @@ import unittest
 from unittest import mock
 from mean import mean
 import time
+import sys
 from io import StringIO
 from contextlib import redirect_stdout
 
@@ -43,8 +44,21 @@ class MyTestCase(unittest.TestCase):
             eps = 10e-2
             self.assertLess(abs(0.2 - output), eps)
 
-    #def test_with_wrong_argument(self):
+    def test_return_value(self):
+        @mean(10)
+        def add(a, b):
+            return a + b
 
+        res = add(1, 2)
+        self.assertEqual(3, res)
+
+    def test_with_wrong_argument(self):
+        with self.assertRaises(TypeError):
+            @mean('10')
+            def foo():
+                pass
+
+            foo()
 
 
 if __name__ == '__main__':
