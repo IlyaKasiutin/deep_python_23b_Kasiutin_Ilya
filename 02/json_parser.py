@@ -9,7 +9,7 @@ def parse_json(json_str: str, required_fields: Optional[List[str]] = None,
         lower_keywords = set(map(lambda x: x.lower(), keywords))
         json_doc = json.loads(json_str)
         for key in json_doc:
-            if key.lower() in required_fields:
+            if key in required_fields:
                 splitted_value = json_doc[key].split()
                 for word in splitted_value:
                     if word.lower() in lower_keywords:

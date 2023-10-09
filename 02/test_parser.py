@@ -27,6 +27,7 @@ class MyTestCase(unittest.TestCase):
     def test_without_match(self):
         parse_json(self.js, ['name'], ['Юлия'], self.m)
         parse_json(self.js, ['Имя'], ['Марфа'], self.m)
+        parse_json(self.js, ['Name'], ['Марфа'], self.m)
         self.assertEqual(0, self.m.call_count)
 
     def test_with_multiple_match(self):
