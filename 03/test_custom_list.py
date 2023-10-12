@@ -67,7 +67,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_str(self):
         obj_a = CustomList([1, 2, 3, 4])
-        self.assertEqual(f"[1, 2, 3, 4], sum=10", obj_a.__str__())
+        self.assertEqual(f"[1, 2, 3, 4], sum=10", str(obj_a))
 
 
 if __name__ == '__main__':
