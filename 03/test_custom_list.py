@@ -45,6 +45,7 @@ class MyTestCase(unittest.TestCase):
         obj_b = [2, 5]
         expected = CustomList([3, 7, 3, 4])
         self.assertEqual(expected, obj_a + obj_b)
+        self.assertEqual(expected, obj_b + obj_a)
 
     def test_subtraction_with_list(self):
         obj_a = CustomList([1, 2, 3, 4])
@@ -65,7 +66,8 @@ class MyTestCase(unittest.TestCase):
         self.assertLess(obj_a, CustomList([11]))
 
     def test_str(self):
-        pass
+        obj_a = CustomList([1, 2, 3, 4])
+        self.assertEqual(f"[1, 2, 3, 4], sum=10", obj_a.__str__())
 
 
 if __name__ == '__main__':
