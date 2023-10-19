@@ -19,4 +19,3 @@ class PositiveInteger:
             raise ValueError("must be positive")
 
         return setattr(obj, self.name, val)
-        

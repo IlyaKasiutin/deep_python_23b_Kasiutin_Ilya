@@ -1,6 +1,6 @@
 class Label:
     def __init__(self, lengths):
-        if not len(lengths):
+        if not lengths:
             raise ValueError("lengths must content at least one value")
         if not isinstance(lengths, tuple):
             raise TypeError("lengths must be tuple")
