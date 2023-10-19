@@ -3,15 +3,9 @@ class Brand:
         self.name = "__brand"
 
     def __get__(self, obj, objtype):
-        if obj is None:
-            return None
-
         return getattr(obj, self.name)
 
     def __set__(self, obj, val):
-        if obj is None:
-            return None
-
         if not isinstance(val, str):
             raise TypeError("must be str")
 

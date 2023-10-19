@@ -3,15 +3,9 @@ class PositiveInteger:
         self.name = f"pos_int_{name}"
 
     def __get__(self, obj, objtype):
-        if obj is None:
-            return None
-
         return getattr(obj, self.name)
 
     def __set__(self, obj, val):
-        if obj is None:
-            return None
-
         if not isinstance(val, int):
             raise TypeError("must be int")
 
