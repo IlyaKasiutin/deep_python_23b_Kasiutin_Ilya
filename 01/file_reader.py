@@ -11,12 +11,13 @@ def file_reader(file: Union[str, _io.TextIOWrapper], words: List[str]) -> List[s
     elif isinstance(file, _io.TextIOWrapper):
         stream = file
 
+    lower_words = list(map(lambda x: x.lower(), words))
+
     for string in stream:
         if string[-2:] == "\n":
             string = string[:-2]
 
         lower_string = set(map(lambda x: x.lower(), string.split()))
-        lower_words = list(map(lambda x: x.lower(), words))
 
         if lower_string.intersection(lower_words):
             yield string.rstrip('\n')
