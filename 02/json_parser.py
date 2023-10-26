@@ -13,6 +13,7 @@ def parse_json(json_str: str, required_fields: Optional[List[str]] = None,
                 splitted_value = json_doc[key].split()
                 for word in splitted_value:
                     if word.lower() in lower_keywords:
-                        word = keyword_callback(word)
+                        keyword_callback(key, word)
+
     except TypeError as err:
         raise TypeError("None or wrong value for arguments is not allowed")
