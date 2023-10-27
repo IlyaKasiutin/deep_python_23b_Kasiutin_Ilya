@@ -21,7 +21,7 @@ class MyTestCase(unittest.TestCase):
         parse_json(self.js, ['name'], ['марфа'], self.m)
 
         self.assertEqual(3, self.m.call_count)
-        expected_calls = [mock.call('Марфа')] * 3
+        expected_calls = [mock.call('name', 'Марфа')] * 3
         self.assertEqual(expected_calls, self.m.mock_calls)
 
     def test_without_match(self):
@@ -31,10 +31,11 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(0, self.m.call_count)
 
     def test_with_multiple_match(self):
-        parse_json(self.js, ['name', 'country'], ['Марфа', 'Сальвадор'], self.m)
-        self.assertEqual(2, self.m.call_count)
-        expected_calls = [mock.call('Марфа'),
-                          mock.call('Сальвадор')]
+        parse_json(self.js, ['name', 'country', 'text'], ['Марфа', 'Сальвадор', 'плод'], self.m)
+        self.assertEqual(3, self.m.call_count)
+        expected_calls = [mock.call('name', 'Марфа'),
+                          mock.call('country', 'Сальвадор'),
+                          mock.call('text', 'плод')]
         self.assertEqual(expected_calls, self.m.mock_calls)
 
     def test_with_empty_required_fields(self):
@@ -69,6 +70,18 @@ class MyTestCase(unittest.TestCase):
     def test_with_wrong_json_type(self):
         with self.assertRaises(json.decoder.JSONDecodeError) as err:
             parse_json("", ['name'], ['Марфа'], self.m)
+
+    def test_with_wrong_keyword(self):
+        parse_json(self.js, required_fields=['name', 'address', 'country', 'text'],
+                   keywords=['wrong_value'], keyword_callback=self.m)
+        self.assertEqual(0, self.m.call_count)
+
+    def test_multiple_match_in_one_field(self):
+        parse_json(self.js, required_fields=['name'],
+                   keywords=['Марфа', 'Рогова'], keyword_callback=self.m)
+        expected_calls = [mock.call('name', 'Марфа'),
+                          mock.call('name', 'Рогова')]
+        self.assertEqual(expected_calls, self.m.mock_calls)
 
 
 if __name__ == '__main__':
