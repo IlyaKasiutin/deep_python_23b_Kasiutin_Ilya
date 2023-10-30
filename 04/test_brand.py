@@ -54,6 +54,16 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual("new value", self.test.value)
         self.assertEqual("new_inst", new_inst.value)
 
+    def test_two_class_instances(self):
+        class Foo:
+            value1 = Brand()
+            value2 = Brand()
+
+        Foo.value1 = "val1"
+        Foo.value2 = "val2"
+        self.assertEqual("val1", Foo.value1)
+        self.assertEqual("val2", Foo.value2)
+
 
 if __name__ == '__main__':
     unittest.main()
