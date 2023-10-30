@@ -1,5 +1,5 @@
 import unittest
-from Brand import Brand
+from brand import Brand
 
 
 class Test:

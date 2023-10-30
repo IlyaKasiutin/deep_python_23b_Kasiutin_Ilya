@@ -1,5 +1,5 @@
 import unittest
-from PositiveInteger import PositiveInteger
+from positive_integer import PositiveInteger
 
 
 class Test:

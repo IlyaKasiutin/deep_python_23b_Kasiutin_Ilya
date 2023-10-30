@@ -1,5 +1,5 @@
 import unittest
-from CustomMeta import CustomMeta
+from custom_meta import CustomMeta
 
 
 class CustomClass(metaclass=CustomMeta):

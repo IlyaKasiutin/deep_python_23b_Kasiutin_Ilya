@@ -1,5 +1,5 @@
 import unittest
-from Label import Label
+from label import Label
 
 
 class Test:
