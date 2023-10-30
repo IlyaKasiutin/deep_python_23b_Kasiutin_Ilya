@@ -1,4 +1,8 @@
+"""Label class"""
+
+
 class Label:
+    """Label (modified string)"""
     def __init__(self, lengths):
         if not lengths:
             raise ValueError("lengths must content at least one value")

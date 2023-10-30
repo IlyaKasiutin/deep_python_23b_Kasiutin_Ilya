@@ -1,4 +1,8 @@
+"""Positive integer class"""
+
+
 class PositiveInteger:
+    """Positive integer"""
     def __set_name__(self, owner, name):
         self.name = f"pos_int_{name}"
 

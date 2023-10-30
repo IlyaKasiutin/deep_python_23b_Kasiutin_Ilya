@@ -1,4 +1,8 @@
+"""Brand class implementation"""
+
+
 class Brand:
+    """Brand class (not-null string)"""
     def __set_name__(self, owner, name):
         self.name = f"__brand_{name}"
 
