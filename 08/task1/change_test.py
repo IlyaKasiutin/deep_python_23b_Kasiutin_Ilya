@@ -4,7 +4,7 @@ from weak_person import WeakPerson
 import time
 
 
-N = 1_000_000
+N = 100_000
 print(f"Number of objects: {N}")
 
 # Person

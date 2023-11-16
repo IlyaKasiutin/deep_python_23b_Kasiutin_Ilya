@@ -4,28 +4,26 @@ from slots_person import SlotsPerson
 from weak_person import WeakPerson
 
 
-N = 1_000_000
+N = 100_000
 print(f"Number of objects: {N}")
 
+
 start = time.time()
-for i in range(N):
-    Person(30, 180, 'teacher')
+persons = [Person(30, 180, 'teacher') for i in range(N)]
 end = time.time()
 
 print(f"Init time for Person: {end - start:.4f}")
 
 
 start = time.time()
-for i in range(N):
-    SlotsPerson(30, 180, 'teacher')
+persons = [SlotsPerson(30, 180, 'teacher') for i in range(N)]
 end = time.time()
 
 print(f"Init time for SlotsPerson: {end - start:.4f}")
 
 
 start = time.time()
-for i in range(N):
-    WeakPerson(30, 180, 'teacher')
+persons = [WeakPerson(30, 180, 'teacher') for i in range(N)]
 end = time.time()
 
 print(f"Init time for WeakPerson: {end - start:.4f}")
