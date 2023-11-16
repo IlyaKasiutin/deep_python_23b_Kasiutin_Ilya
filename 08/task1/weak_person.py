@@ -4,6 +4,7 @@ import weakref
 
 
 class Value:
+    """Class for holding value of any type"""
     ref_holder = []
 
     def __init__(self, val: Any):
@@ -13,6 +14,7 @@ class Value:
 
 
 class WeakPerson:
+    """Class with weak refs"""
     def __init__(self, age: int, height: int, job: str):
         self.age = weakref.ref(Value(age))
         self.height = weakref.ref(Value(height))
@@ -24,8 +26,8 @@ class WeakPerson:
 
         if item in self.__dict__:
             return self.__dict__[item]().value
-        else:
-            return super().__getattribute__(item)
+
+        return super().__getattribute__(item)
 
     def __setattr__(self, key, value):
         if key not in self.__dict__:

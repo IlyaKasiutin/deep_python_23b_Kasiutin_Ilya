@@ -1,7 +1,8 @@
+"""Change value timing"""
+import time
 from person import Person
 from slots_person import SlotsPerson
 from weak_person import WeakPerson
-import time
 
 
 N = 100_000
