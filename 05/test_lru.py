@@ -27,12 +27,12 @@ class MyTestCase(unittest.TestCase):
         cache.set("k1", "val1")
         cache.set("k2", "val2")
 
-        self.assertEqual("k1", cache.order[0])
-        self.assertEqual("k2", cache.order[1])
+        self.assertEqual("k2", cache.head.key)
+        self.assertEqual("k1", cache.tail.key)
 
         cache.get("k1")
-        self.assertEqual("k2", cache.order[0])
-        self.assertEqual("k1", cache.order[-1])
+        self.assertEqual("k1", cache.head.key)
+        self.assertEqual("k2", cache.tail.key)
 
 
 if __name__ == '__main__':
