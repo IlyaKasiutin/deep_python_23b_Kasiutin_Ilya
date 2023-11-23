@@ -1,3 +1,6 @@
+"""LRU Cache with logging options"""
+
+
 import logging
 
 
@@ -10,6 +13,7 @@ logger.addHandler(handler)
 
 
 class LRUCache:
+    """LRU Cache implementation"""
     def __init__(self, limit=42):
         self.limit = limit
         self.cache = {}
@@ -18,6 +22,7 @@ class LRUCache:
         logger.debug("New LRUCache instance created")
 
     def get(self, key):
+        """Get value by key"""
         if key not in self.cache:
             logger.info("Got key='%s' which is not in cache", key)
             return None
@@ -28,6 +33,7 @@ class LRUCache:
         return node.value
 
     def set(self, key, value):
+        """Set key-value"""
         if key in self.cache:
             node = self.cache[key]
             node.value = value
@@ -87,6 +93,7 @@ class LRUCache:
 
 
 class Node:
+    """Subclass for LRUCache"""
     def __init__(self, key, value):
         self.key = key
         self.value = value
