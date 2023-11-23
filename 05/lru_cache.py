@@ -1,4 +1,8 @@
+"""LRU Cache class"""
+
+
 class LRUCache:
+    """LRU Cache implementation"""
     def __init__(self, limit=42):
         self.limit = limit
         self.cache = {}
@@ -6,6 +10,7 @@ class LRUCache:
         self.tail = None
 
     def get(self, key):
+        """Get value by key"""
         if key not in self.cache:
             return None
 
@@ -14,6 +19,7 @@ class LRUCache:
         return node.value
 
     def set(self, key, value):
+        """Set key-value"""
         if key in self.cache:
             node = self.cache[key]
             node.value = value
@@ -27,6 +33,7 @@ class LRUCache:
                 self.__remove_last()
 
     def __add_to_front(self, node):
+        """Add to the beginning of the list"""
         if not self.head:
             self.head = node
             self.tail = node
@@ -36,6 +43,7 @@ class LRUCache:
             self.head = node
 
     def __remove_last(self):
+        """Remove the eldest element"""
         if not self.tail:
             return
 
@@ -49,6 +57,7 @@ class LRUCache:
             self.tail.next = None
 
     def __move_to_front(self, node):
+        """Replace element"""
         if node == self.head:
             return
 
@@ -66,6 +75,7 @@ class LRUCache:
 
 
 class Node:
+    """Subclass for LRUCache"""
     def __init__(self, key, value):
         self.key = key
         self.value = value
