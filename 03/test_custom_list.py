@@ -16,10 +16,12 @@ class MyTestCase(unittest.TestCase):
         self.assertIsInstance(obj, CustomList)
         self.assertEqual(0, len(obj))
 
-    def test_equal(self):
+    def test_eq(self):
         obj_a = CustomList([1, 2, 3])
         obj_b = CustomList([2, 4])
+        obj_c = CustomList([3, 2, 1])
         self.assertEqual(obj_a, obj_b)
+        self.assertEqual(obj_a, obj_c)
 
     def test_addition_with_equal_length_cl(self):
         obj_a = CustomList([1, 2, 3])
