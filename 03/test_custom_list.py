@@ -3,9 +3,10 @@ from custom_list import CustomList
 
 
 def comp_list(list_a, list_b):
+    assert(len(list_a) == len(list_b))
+
     for elem in zip(list_a, list_b):
-        if elem[0]!=elem[1]:
-            return False
+        assert(elem[0] == elem[1])
     return True
 
 
@@ -14,6 +15,11 @@ class MyTestCase(unittest.TestCase):
         obj = CustomList([])
         self.assertIsInstance(obj, CustomList)
         self.assertEqual(0, len(obj))
+
+    def test_equal(self):
+        obj_a = CustomList([1, 2, 3])
+        obj_b = CustomList([2, 4])
+        self.assertEqual(obj_a, obj_b)
 
     def test_addition_with_equal_length_cl(self):
         obj_a = CustomList([1, 2, 3])
@@ -132,8 +138,8 @@ class MyTestCase(unittest.TestCase):
 
     def test_comparison(self):
         obj_a = CustomList([1, 2, 3, 4])
-        comp_list(obj_a, CustomList([1, 2, 3, 4]))
-        comp_list(obj_a, CustomList([10]))
+        self.assertEqual(obj_a, CustomList([1, 2, 3, 4]))
+        self.assertEqual(obj_a, CustomList([10]))
         self.assertNotEqual(obj_a, CustomList([1, 2]))
         self.assertGreaterEqual(obj_a, CustomList([10]))
         self.assertLessEqual(obj_a, CustomList([10]))
