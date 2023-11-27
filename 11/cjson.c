@@ -32,7 +32,10 @@ PyObject* process_token(char* token)
     return NULL;
 }
 
-
+int check_key_token(const char* string)
+{
+    return (string[0] == '\"' && string[strlen(string) - 1] == '\"');
+}
 
 PyObject* loads(PyObject* self, PyObject* args)
 {
@@ -70,7 +73,15 @@ PyObject* loads(PyObject* self, PyObject* args)
     while (token != NULL)
     {
         if (key == NULL)
+        {
+            if (!check_key_token(token))
+            {
+                PyErr_Format(PyExc_TypeError, "Expected object or value\n");
+                return NULL;
+            }
             key = process_token(token);
+        }
+            
         else if (value == NULL)
         {
             value = process_token(token);
@@ -79,6 +90,7 @@ PyObject* loads(PyObject* self, PyObject* args)
                 PyErr_Format(PyExc_TypeError, "Expected object or value\n");
                 return NULL;
             }
+
 
             PyDict_SetItem(dict, key, value);
             key = NULL;
@@ -109,6 +121,11 @@ int is_int(PyObject* pyobject)
     return PyLong_CheckExact(pyobject);
 }
 
+int is_dict(PyObject* pyobject)
+{
+    return PyDict_CheckExact(pyobject);
+}
+
 char* replace_char(char* str, char find, char replace){
     char *current_pos = strchr(str,find);
     while (current_pos) {
@@ -123,6 +140,12 @@ PyObject* dumps(PyObject* self, PyObject* args)
 {
     PyObject* json_dict = NULL;
     if (!PyArg_ParseTuple(args, "O", &json_dict))
+    {
+        PyErr_Format(PyExc_TypeError, "Expected object or value\n");
+        return NULL;
+    }
+
+    if (!is_dict(json_dict))
     {
         PyErr_Format(PyExc_TypeError, "Expected object or value\n");
         return NULL;
