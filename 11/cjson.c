@@ -8,33 +8,28 @@ PyObject* process_token(char* token)
 {
     if (token[0] == '\"' && token[strlen(token) - 1] == '\"')
     {
-        // printf("TOKEN_PROCESS: %s\n", token);
         size_t len = strlen(token);
-        token[len-1] = '\0';
-        // char new_token[len - 2];
-        // strncpy(new_token, token + 1, len - 2);
-        // printf("TOKEN End: %s\n", new_token);
-        // printf("TOKEN LEN: %d\n", len - 2);
-        return Py_BuildValue("s", token + 1);
+        char new_token[len-1];
+        new_token[len - 2] = '\0';
+        strncpy(new_token, token + 1, len - 2);
+        return Py_BuildValue("s", new_token);
     }
     
-    else if (token[0] != '\"' && token[1] != '\"')
+    else if (token[0] != '\"' && token[strlen(token) - 1] != '\"')
     {
-        for (int i = 0; i < strlen(token); i++)
+        size_t len = strlen(token);
+        for (size_t i = 0; i < len; i++)
         {
-            if (!isalpha(token[i]))
-                PyErr_Format(PyExc_TypeError, "Expected str or int");
+            if (!isdigit(token[i]))
+                return NULL;
 
         }
-        printf("DIGIT: %s\n", token);
-        printf("LEN: %d\n", strlen(token));
-        // int val = atoi(token);
-        // printf("VAL: %s\n", val);
-        return Py_BuildValue("i", token);
+
+        int val = atoi(token);
+        return Py_BuildValue("i", val);
     }
     
-    else
-        PyErr_Format(PyExc_TypeError, "Expected str or int");
+    return NULL;
 }
 
 
@@ -47,20 +42,17 @@ PyObject* loads(PyObject* self, PyObject* args)
         PyErr_Format(PyExc_TypeError, "Expected object or value\n");
         return NULL;
     }
-    printf("JSON_BASE_STR: %s\n", json_base_str);
 
     size_t len = strlen(json_base_str);
-    printf("STRLEN: %d\n", len);
+
     if (json_base_str[0] != '{' && json_base_str[len - 2] != '}')
     {
         PyErr_Format(PyExc_TypeError, "Expected json string");
     }
-    json_base_str[len - 1] = '\0';
-    printf("UPDATED STR: %s\n", json_base_str);
 
-    char json_str[len];
-    strncpy(json_str, json_base_str + 1, len - 1);
-    printf("JSON_STR: %s\n", json_str);
+    char json_str[len - 2];
+    strncpy(json_str, json_base_str + 1, len - 2);
+    json_str[len - 2] = '\0';
 
 
     PyObject* dict = NULL;
@@ -73,21 +65,22 @@ PyObject* loads(PyObject* self, PyObject* args)
     PyObject* key = NULL;
     PyObject* value = NULL;
     char* token = strtok(json_str, ":, ");
+
+
     while (token != NULL)
     {
-        printf("TOKEN: %s\n", token);
         if (key == NULL)
             key = process_token(token);
         else if (value == NULL)
         {
             value = process_token(token);
-            puts("INSERTING...");
-            // value = Py_BuildValue("s", value);
-            // key = Py_BuildValue("s", key);
+            if (key == NULL || value == NULL)
+            {
+                PyErr_Format(PyExc_TypeError, "Expected object or value\n");
+                return NULL;
+            }
 
-            // printf("KEY: %s, VALUE: %s\n", key, value);
             PyDict_SetItem(dict, key, value);
-            puts("FINISHED INSERT");
             key = NULL;
             value = NULL;
         }
@@ -96,8 +89,73 @@ PyObject* loads(PyObject* self, PyObject* args)
     return dict;
 }
 
+
+const char* string_from_pyobject(PyObject* pyobject)
+{
+    PyObject* repr = PyObject_Repr(pyobject);
+    PyObject* str = PyUnicode_AsEncodedString(repr, "utf-8", "~E~");
+    char *string = PyBytes_AS_STRING(str);
+    return string;
+}
+
+
+int is_str(PyObject* pyobject)
+{
+    return PyUnicode_Check(pyobject);
+}
+
+int is_int(PyObject* pyobject)
+{
+    return PyLong_CheckExact(pyobject);
+}
+
+char* replace_char(char* str, char find, char replace){
+    char *current_pos = strchr(str,find);
+    while (current_pos) {
+        *current_pos = replace;
+        current_pos = strchr(current_pos,find);
+    }
+    return str;
+}
+
+
+PyObject* dumps(PyObject* self, PyObject* args)
+{
+    PyObject* json_dict = NULL;
+    if (!PyArg_ParseTuple(args, "O", &json_dict))
+    {
+        PyErr_Format(PyExc_TypeError, "Expected object or value\n");
+        return NULL;
+    }
+
+    PyObject *key;
+    PyObject *value;
+    Py_ssize_t pos = 0;
+
+    while (PyDict_Next(json_dict, &pos, &key, &value))
+    {
+        if (!is_str(key))
+        {
+            PyErr_Format(PyExc_TypeError, "Expected object or value\n");
+            return NULL;
+        }
+
+        if (!is_int(value) && !is_str(value))
+        {
+            PyErr_Format(PyExc_TypeError, "Expected object or value\n");
+            return NULL;
+        }  
+    }
+
+    char* str_repr = string_from_pyobject(json_dict);
+    replace_char(str_repr, '\'', '\"');
+    return Py_BuildValue("s", str_repr);
+}
+
+
 static PyMethodDef methods[] = {
-    {"loads", loads, METH_VARARGS, "parse json-string into python dict"}
+    {"loads", loads, METH_VARARGS, "parse json-string into python dict"},
+    {"dumps", dumps, METH_VARARGS, "parse json-dict into str"}
 };
 
 
