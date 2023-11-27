@@ -1,7 +1,7 @@
 make:
-	python3 -m venv environ
+	python3 -m venv venv
+	chmod +x venv/bin/activate
 	. venv/bin/activate
-	pip install requirements.txt
 	python3 setup.py install
 
 test:
