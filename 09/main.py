@@ -1,15 +1,12 @@
 """Main file"""
 
 
-import argparse
+from parsing_args import get_args
 from lru_cache import LRUCache, logger
 from logging_config import CustomFilter, get_file_handler, get_stream_handler
 
 
-parser = argparse.ArgumentParser('logger')
-parser.add_argument('-s', action='store_true')
-parser.add_argument('-f', action='store_true')
-args = parser.parse_args()
+args = get_args()
 
 
 file_handler = get_file_handler("cache.log")
