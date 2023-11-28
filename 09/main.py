@@ -2,9 +2,8 @@
 
 
 import argparse
-import logging
-from lru_cache import LRUCache, logger, handler
-from filter import CustomFilter
+from lru_cache import LRUCache, logger
+from logging_config import CustomFilter, get_file_handler, get_stream_handler
 
 
 parser = argparse.ArgumentParser('logger')
@@ -12,15 +11,23 @@ parser.add_argument('-s', action='store_true')
 parser.add_argument('-f', action='store_true')
 args = parser.parse_args()
 
+
+file_handler = get_file_handler("cache.log")
+handlers = [file_handler]
+logger.addHandler(file_handler)
+
 if args.s:
-    stream_handler = logging.StreamHandler()
-    if args.f:
-        custom_filter = CustomFilter()
+    stream_handler = get_stream_handler()
+    handlers.append(stream_handler)
+
+
+if args.f:
+    custom_filter = CustomFilter()
+    for handler in handlers:
         handler.addFilter(custom_filter)
-        stream_handler.addFilter(custom_filter)
-    formatter = logging.Formatter(">>> %(asctime)s\t%(levelname)s\t%(name)s\t%(message)s")
-    stream_handler.setFormatter(formatter)
-    logger.addHandler(stream_handler)
+
+for handler in handlers:
+    logger.addHandler(handler)
 
 
 if __name__ == "__main__":

@@ -3,13 +3,10 @@
 
 import logging
 
+from logging_config import create_custom_logger
 
-logger = logging.getLogger("LRUCache")
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler("cache.log", 'w')
-formatter = logging.Formatter("%(asctime)s\t%(levelname)s\t%(name)s\t%(message)s")
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+
+logger = create_custom_logger("LRUCache", logging.DEBUG)
 
 
 class LRUCache:
