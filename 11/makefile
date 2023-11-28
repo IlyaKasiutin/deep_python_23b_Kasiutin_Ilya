@@ -1,8 +1,9 @@
 make:
 	python3 -m venv venv
-	chmod +x venv/bin/activate
 	. venv/bin/activate
+	pip install -r requirements.txt
 	python3 setup.py install
 
 test:
-	python3 -m unittest --coverage test_json_dumps.py test_json_loads.py
+	python -m coverage run -m unittest
+	python -m coverage report
