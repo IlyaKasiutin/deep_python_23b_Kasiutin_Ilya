@@ -17,7 +17,6 @@ if args.s:
     stream_handler = get_stream_handler()
     handlers.append(stream_handler)
 
-
 if args.f:
     custom_filter = CustomFilter()
     for handler in handlers:

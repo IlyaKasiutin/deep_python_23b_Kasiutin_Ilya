@@ -1,4 +1,4 @@
-"""Filter which check if 'key' in record message"""
+"""Configuration of loggers"""
 
 import logging
 
