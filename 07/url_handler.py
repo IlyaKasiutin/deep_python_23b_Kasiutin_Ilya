@@ -7,7 +7,7 @@ from aiohttp import client_exceptions
 from bs4 import BeautifulSoup
 
 
-async def fetch_url(url: str):
+async def fetch_url(url: str, idx):
     """Fetches one url"""
     async with aiohttp.ClientSession() as session:
         try:
@@ -17,27 +17,29 @@ async def fetch_url(url: str):
                 refs = []
                 for link in soup.find_all('a'):
                     refs.append(link.get('href'))
-                return url, refs
+                return url, refs, idx
 
         except client_exceptions.ClientConnectorError:
-            return url, "Ошибка подключения"
+            return url, "Ошибка подключения", idx
 
 
-async def fetch_worker(que: asyncio.Queue, res_container: List):
+async def fetch_worker(que: asyncio.Queue, res_container: List, idx):
     """executes tasks from queue"""
     while True:
-        url = await que.get()
+        try:
+            url = await que.get()
+            result = await fetch_url(url, idx)
+            res_container.append(result)
 
-        result = await fetch_url(url)
-        res_container.append(result)
-        que.task_done()
+        finally:
+            que.task_done()
 
 
 async def fetch_all_urls(urls_path: str, request_count: int):
     """Fetches batch of urls"""
     que = asyncio.Queue()
     output = []
-    workers = [asyncio.create_task(fetch_worker(que, output)) for _ in range(request_count)]
+    workers = [asyncio.create_task(fetch_worker(que, output, i)) for i in range(request_count)]
 
     async with aiofiles.open(urls_path, encoding="UTF-8") as urls:
         async for url in urls:
